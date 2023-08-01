@@ -1,0 +1,42 @@
+C51 COMPILER V9.54   MAIN                                                                  03/10/2023 16:10:06 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Keil5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main.l
+                    -st) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <Delay.h>
+   2          #include <REGX52.H>
+   3          #include <Nixie.h>
+   4          
+   5          void main(){
+   6   1        while(1){
+   7   2          
+   8   2          Nixie(1,1);
+   9   2          Delay(5);//延时5ms，防止闪烁太快看不出来
+  10   2          Nixie(2,5);
+  11   2          Delay(5);
+  12   2          Nixie(3,5);
+  13   2          Delay(5);
+  14   2          Nixie(4,7);
+  15   2          Delay(5);
+  16   2          
+  17   2        }
+  18   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     50    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

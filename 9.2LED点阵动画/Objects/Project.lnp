@@ -1,0 +1,6 @@
+".\Objects\74HC595.obj",
+".\Objects\Delay.obj",
+".\Objects\main.obj",
+".\Objects\Timer0.obj" 
+TO ".\Objects\Project" 
+PRINT(".\Listings\Project.m51") RAMSIZE(256) 

@@ -1,0 +1,42 @@
+C51 COMPILER V9.54   MAIN                                                                  03/14/2023 22:50:26 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Keil5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main.l
+                    -st) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "74HC595.h"
+   3          
+   4          void main(void)
+   5          {
+   6   1        _74HC595_Init();
+   7   1        while(1)
+   8   1        {
+   9   2          LED_Write_column(0, 0x3c);
+  10   2          LED_Write_column(1, 0x42);
+  11   2          LED_Write_column(2, 0xa9);
+  12   2          LED_Write_column(3, 0x85);
+  13   2          LED_Write_column(4, 0x85);
+  14   2          LED_Write_column(5, 0xa9);
+  15   2          LED_Write_column(6, 0x42);
+  16   2          LED_Write_column(7, 0x3c);
+  17   2        }
+  18   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     77    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

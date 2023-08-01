@@ -1,0 +1,165 @@
+C51 COMPILER V9.54   IR                                                                    03/30/2023 21:59:42 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE IR
+OBJECT MODULE PLACED IN .\Objects\IR.obj
+COMPILER INVOKED BY: D:\Keil5\C51\BIN\C51.EXE IR.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\IR.lst) 
+                    -TABS(2) OBJECT(.\Objects\IR.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "INT0.h"
+   3          #include "Timer0.h"
+   4          
+   5          //状态转移标志与时间间隔
+   6          unsigned char IR_State = 0;
+   7          unsigned int IR_Time;
+   8          
+   9          //短暂接收数据
+  10          unsigned char IR_Data[4];
+  11          unsigned char IR_pData = 0;
+  12          
+  13          //重发标志，数据标志，命令，地址码
+  14          unsigned char IR_DataFlag = 0;
+  15          unsigned char IR_RepeatFlag = 0;
+  16          unsigned char IR_Command;
+  17          unsigned char IR_Address;
+  18          
+  19          /**
+  20            * @brief 初始化红外接收模块
+  21            * @param 无
+  22            * @retval 无
+  23            */
+  24          void IR_Init(void)
+  25          {
+  26   1        Int0_Init();
+  27   1        Timer0Init();
+  28   1      }
+  29          
+  30          /**
+  31            * @brief 返回重发标志，数据标志，命令，地址码
+  32            * @param 无
+  33            * @retval 重发标志或数据标志或命令或地址码
+  34            */
+  35          unsigned char IR_getRepeatFlag(void)
+  36          {
+  37   1        if(IR_RepeatFlag)
+  38   1        {
+  39   2          IR_RepeatFlag = 0;
+  40   2          return 1;
+  41   2        }
+  42   1        return 0;
+  43   1      }
+  44          
+  45          unsigned char IR_getDataFlag(void)
+  46          {
+  47   1        if(IR_DataFlag)
+  48   1        {
+  49   2          IR_DataFlag = 0;
+  50   2          return 1;
+  51   2        }
+  52   1        return 0;
+  53   1      }
+  54          
+C51 COMPILER V9.54   IR                                                                    03/30/2023 21:59:42 PAGE 2   
+
+  55          unsigned char IR_getCommand(void)
+  56          {
+  57   1        return IR_Command;
+  58   1      }
+  59          
+  60          unsigned char IR_getAddress(void)
+  61          {
+  62   1        return IR_Address;
+  63   1      }
+  64          
+  65          /**
+  66            * @brief 外部中断触发
+  67            * @param 无
+  68            * @retval 无
+  69            */
+  70          void Int0_Routine(void) interrupt 0
+  71          {
+  72   1        if(IR_State == 0)//状态0，用来开始接收
+  73   1        {
+  74   2          Timer0_setCount(0);
+  75   2          Timer0_run(1);
+  76   2          IR_State = 1;
+  77   2        }
+  78   1        else if(IR_State == 1)//状态1，用来接收开始标志和重发标志
+  79   1        {
+  80   2          IR_Time = Timer0_getCount();
+  81   2          
+  82   2          if((IR_Time > 12442 - 500) && (IR_Time < 12442 + 500))
+  83   2          {
+  84   3            //开始标志
+  85   3            IR_State = 2;
+  86   3            Timer0_setCount(0);
+  87   3          }
+  88   2          else if((IR_Time > 10368 - 500) && (IR_Time < 10368 + 500))
+  89   2          {
+  90   3            //重发标志
+  91   3            IR_RepeatFlag = 1;
+  92   3            IR_State = 0;
+  93   3            Timer0_run(0);
+  94   3            Timer0_setCount(0);
+  95   3          }
+  96   2          else 
+  97   2          {
+  98   3            //意外情况
+  99   3            IR_State = 0;
+ 100   3            Timer0_run(0);
+ 101   3          }
+ 102   2        }
+ 103   1        else if(IR_State == 2)//状态2，用来解码数据
+ 104   1        {
+ 105   2          IR_Time = Timer0_getCount();
+ 106   2          Timer0_setCount(0);
+ 107   2          
+ 108   2          if((IR_Time > 1032-500) && (IR_Time < 1032+500))
+ 109   2          {
+ 110   3            //数据0
+ 111   3            IR_Data[IR_pData/8] &= ~(0x01<<(IR_pData%8));
+ 112   3            IR_pData++;
+ 113   3          }
+ 114   2          else if((IR_Time > 2074-500) && (IR_Time < 2074+500))
+ 115   2          {
+ 116   3            //数据1
+C51 COMPILER V9.54   IR                                                                    03/30/2023 21:59:42 PAGE 3   
+
+ 117   3            IR_Data[IR_pData/8] |= (0x01<<(IR_pData%8));
+ 118   3            IR_pData++;
+ 119   3          }
+ 120   2          else {
+ 121   3            IR_pData = 0;
+ 122   3            IR_State = 1;
+ 123   3          }
+ 124   2          if(IR_pData >= 32)//控制数据接收
+ 125   2          {
+ 126   3            IR_pData = 0;
+ 127   3            if((IR_Data[0] == ~IR_Data[1]) && (IR_Data[2] == ~IR_Data[3]))
+ 128   3            {
+ 129   4              IR_Address = IR_Data[0];
+ 130   4              IR_Command = IR_Data[2];
+ 131   4              IR_DataFlag = 1;
+ 132   4            }
+ 133   3            Timer0_run(0);
+ 134   3            IR_State = 0;
+ 135   3          }
+ 136   2        }
+ 137   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    386    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     12    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

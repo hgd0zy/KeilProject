@@ -1,0 +1,62 @@
+C51 COMPILER V9.54   MAIN                                                                  03/30/2023 22:02:37 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Keil5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main.l
+                    -st) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "myLCD1602.h"
+   3          #include "IR.h"
+   4          
+   5          unsigned char num;
+   6          unsigned char Address,Command;
+   7          
+   8          void main(void)
+   9          {
+  10   1        LCD_Init();
+  11   1        num = 0;
+  12   1        Address = 0;
+  13   1        Command = 0;
+  14   1        LCD_ShowString(1,1,"ADDR  CMD  NUM");
+  15   1        IR_Init();
+  16   1        
+  17   1        while(1)
+  18   1        {
+  19   2          if(IR_getDataFlag() || IR_getRepeatFlag())
+  20   2          {
+  21   3            Command = IR_getCommand();
+  22   3            Address = IR_getAddress();
+  23   3            
+  24   3            if(Command == IR_VOL_MINUS)
+  25   3            {
+  26   4              num--;
+  27   4            }
+  28   3            if(Command == IR_VOL_ADD)
+  29   3            {
+  30   4              num++;
+  31   4            }
+  32   3          }
+  33   2          LCD_ShowHexNum(2,1,Address,2);
+  34   2          LCD_ShowHexNum(2,7,Command,2);
+  35   2          LCD_ShowNum(2,12,num,3);
+  36   2        }
+  37   1      }
+  38          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    109    ----
+   CONSTANT SIZE    =     15    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      3    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

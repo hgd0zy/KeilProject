@@ -1,0 +1,52 @@
+C51 COMPILER V9.54   MAINPLUS                                                              03/07/2023 15:30:30 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAINPLUS
+OBJECT MODULE PLACED IN .\Objects\mainPlus.obj
+COMPILER INVOKED BY: D:\Keil5\C51\BIN\C51.EXE mainPlus.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\ma
+                    -inPlus.lst) TABS(2) OBJECT(.\Objects\mainPlus.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include <INTRINS.H>
+   3          
+   4          void Delay1ms(unsigned int time)    //@12.000MHz
+   5          {
+   6   1        unsigned char i, j;
+   7   1      
+   8   1        while(time--){
+   9   2          i = 12;
+  10   2          j = 169;
+  11   2          do
+  12   2          {
+  13   3            while (--j);
+  14   3          } while (--i);
+  15   2        }
+  16   1      }
+  17          
+  18          
+  19          void main(){
+  20   1        int Led[] = {0xfe,0xfd,0xfb,0xf7,0xef,0xdf,0xbf,0x7f};
+  21   1        int i = 0;
+  22   1        while(1){
+  23   2          for(i=0;i<8;i++){
+  24   3            P2 = Led[i];
+  25   3            Delay1ms(100);
+  26   3          }
+  27   2        }
+  28   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     73    ----
+   CONSTANT SIZE    =     16    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      16
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

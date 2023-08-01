@@ -1,0 +1,70 @@
+C51 COMPILER V9.54   NIXIE                                                                 03/28/2023 15:37:33 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE NIXIE
+OBJECT MODULE PLACED IN .\Objects\Nixie.obj
+COMPILER INVOKED BY: D:\Keil5\C51\BIN\C51.EXE Nixie.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\Nixie
+                    -.lst) TABS(2) OBJECT(.\Objects\Nixie.obj)
+
+line level    source
+
+   1          #include <Nixie.h>
+   2          #include <REGX52.H>
+   3          
+   4          unsigned char Number[] = {0x3f,0x06,0x5b,0x4f,0x66,
+   5          0x6d,0x7d,0x07,0x7f,0x6f,0x3f}; //给P0赋的值,代表了0到9的10个数字
+   6          
+   7          
+   8          void Nixie(unsigned char Location, number){
+*** WARNING C235 IN LINE 8 OF Nixie.c: parameter 2: different types
+   9   1        
+  10   1          //通过给P2_4、P2_3、P2_2赋值来指定点亮的数码管
+  11   1        //CBA指定点亮的数码管(Y0-Y7,最左为Y7)
+  12   1        //case(1-8)为从左到右的第1到第8个数码管
+  13   1        switch(Location){
+  14   2          case 1:
+  15   2            P2_4 = 1;// C = 1
+  16   2            P2_3 = 1;// B = 1
+  17   2            P2_2 = 1;// A = 1
+  18   2            break;
+  19   2          case 2:
+  20   2            P2_4 = 1;P2_3 = 1;P2_2 = 0;//CBA = 110
+  21   2            break;
+  22   2          case 3:
+  23   2            P2_4 = 1;P2_3 = 0;P2_2 = 1;//CBA = 101
+  24   2            break;
+  25   2          case 4:
+  26   2            P2_4 = 1;P2_3 = 0;P2_2 = 0;//CBA = 100
+  27   2            break;
+  28   2          case 5:
+  29   2            P2_4 = 0;P2_3 = 1;P2_2 = 1;//CBA = 011
+  30   2            break;
+  31   2          case 6:
+  32   2            P2_4 = 0;P2_3 = 1;P2_2 = 0;//CBA = 010
+  33   2            break;
+  34   2          case 7:
+  35   2            P2_4 = 0;P2_3 = 0;P2_2 = 1;//CBA = 001
+  36   2            break;
+  37   2          case 8:
+  38   2            P2_4 = 0;P2_3 = 0;P2_2 = 0;//CBA = 000
+  39   2            break;
+  40   2        }
+  41   1        //给P0指定值来显示数字
+  42   1        P0 = Number[number];
+  43   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     99    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     11    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+C51 COMPILER V9.54   NIXIE                                                                 03/28/2023 15:37:33 PAGE 2   
+
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

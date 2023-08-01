@@ -1,0 +1,74 @@
+C51 COMPILER V9.54   MAIN                                                                  03/13/2023 15:29:56 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Keil5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main.l
+                    -st) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "Timer0.h"
+   3          #include "Key.h"
+   4          #include <INTRINS.H>
+   5          
+   6          unsigned char Led_mode = 1;
+   7          
+   8          void main()
+   9          {
+  10   1        Timer0Init();//初始化定时器0
+  11   1        P2 = 0xfe;//赋led的初值
+  12   1        
+  13   1        //根据按下的按键控制左移和右移
+  14   1        while(1){
+  15   2          #if 0
+                  switch(getKey()){
+                    case 1:
+                      Led_mode = 1;
+                      break;
+                    case 2:
+                      Led_mode = -1;
+                      break;
+                  }
+                  #endif
+  25   2          if(getKey() == 1)Led_mode = -Led_mode;
+  26   2        }
+  27   1      }
+  28          
+  29          void Timer0_Rountine(void) interrupt 1
+  30          {
+  31   1        static unsigned int count = 0;
+  32   1        TL0 = 0x66;   //设置定时初值
+  33   1        TH0 = 0xFC;   //设置定时初值
+  34   1        count++;
+  35   1        
+  36   1        if(count >= 500)
+  37   1        {
+  38   2          count = 0;
+  39   2          //右移（低位向高位）
+  40   2          if(Led_mode == 1){
+  41   3            P2 = _crol_(P2,1);
+  42   3          }
+  43   2          //左移（高位向低位）
+  44   2          if(Led_mode == -1){
+  45   3            P2 = _cror_(P2,1);
+  46   3          }
+  47   2        }
+  48   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    105    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+C51 COMPILER V9.54   MAIN                                                                  03/13/2023 15:29:56 PAGE 2   
+
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      3    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
